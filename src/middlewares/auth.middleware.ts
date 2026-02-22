@@ -24,6 +24,10 @@ export const authMiddleware = (TokenService:ITokenService) => {
 
             const decoded=TokenService.verifyToken(token);
 
+            if (!decoded) {
+                return res.status(401).json({ message: "Invalid token" });
+            }
+
             req.user=decoded;
 
             next();

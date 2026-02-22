@@ -73,12 +73,13 @@ export class UserService implements IUserService{
         return this.mapUserResponse(user);
     }
 
-    async deleteUser(id: number): Promise<void> {
+    async deleteUser(id: number): Promise<boolean> {
         const user=await this._userRepository.findById(id);
         if(!user){
-            throw new Error("User not found");
+            return false;
         }
         await this._userRepository.deleteUser(id);
+        return true;
     }
 
     async updateUser(id: number, data: UserUpdateDTO): Promise<UserResponseDTO | null> {

@@ -29,7 +29,6 @@ export class UserController {
         }
     }
 
-
     login=async(req:Request, res:Response): Promise<Response> => {
         try{
             const dto:LoginDTO=req.body;
@@ -64,6 +63,20 @@ export class UserController {
         }
     }
 
+    getAllUsers=async(req:AuthRequest, res:Response) : Promise<Response> => {
+        try{
+            const users=await this._service.getAllUsers();
+            if(!users || users.length===0){
+                return res.status(404).json({ message: "No users found" });
+            }
+
+            return res.status(200).json(users);
+
+        }catch(error:any){
+            return res.status(500).json({ message: "Error getting users", error: error.message });
+        }
+    }
+
     updateProfile=async(req:AuthRequest, res:Response) : Promise<Response> => {
         try{
             const userId=req.user.id;
@@ -82,6 +95,45 @@ export class UserController {
 
         }catch(error:any){
             return res.status(500).json({ message: "Error updating profile", error: error.message });
+        }
+    }
+
+    deleteUser=async(req:AuthRequest, res:Response) : Promise<Response> => {
+        try{
+            const {id}=req.params;
+
+            if(!id){
+                return res.status(400).json({ message: "User ID is required" });
+            }
+
+            const deletedUser=await this._service.deleteUser(Number(id));
+            if(!deletedUser){
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            return res.status(200).json({ message: "User deleted successfully" });
+
+        }catch(error:any){
+            return res.status(500).json({ message: "Error deleting user", error: error.message });
+        }
+    }
+
+    getUserById=async(req:AuthRequest, res:Response) : Promise<Response> => {
+        try{
+            const {id}=req.params;
+            if(!id){
+                return res.status(400).json({ message: "User ID is required" });
+            }
+
+            const user=await this._service.getUserById(Number(id));
+            if(!user){
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            return res.status(200).json(user);
+
+        }catch(error:any){
+            return res.status(500).json({ message: "Error getting user", error: error.message });
         }
     }
 

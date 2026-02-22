@@ -9,6 +9,6 @@ export interface IUserService{
     loginEmail(data:LoginDTO) : Promise<SessionDTO | null>;
     getAllUsers() : Promise<UserResponseDTO[]>;
     getUserById(id: number) : Promise<UserResponseDTO | null>;
-    deleteUser(id: number) : Promise<void>;
+    deleteUser(id: number) : Promise<boolean>;
     updateUser(id: number, data: UserUpdateDTO) : Promise<UserResponseDTO | null>;
 }

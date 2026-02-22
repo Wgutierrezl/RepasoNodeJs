@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { userController, auth } from "../containers/user.container";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import { authorizeMiddleware } from "../middlewares/authorize.middleware";
 
 const router=Router()
 
@@ -113,6 +113,7 @@ const router=Router()
  */
 router.post("/register",userController.register);
 
+
 /**
  * @swagger
  * /users/login:
@@ -137,6 +138,7 @@ router.post("/register",userController.register);
  */
 router.post("/login",userController.login);
 
+
 /**
  * @swagger
  * /users/profile:
@@ -155,7 +157,10 @@ router.post("/login",userController.login);
  *       401:
  *         description: Unauthorized
  */
-router.get("/profile",auth,userController.getProfile);
+router.get("/profile",
+            auth,
+            authorizeMiddleware(["employee","admin"]),
+            userController.getProfile);
 
 /**
  * @swagger
@@ -183,6 +188,94 @@ router.get("/profile",auth,userController.getProfile);
  *       401:
  *         description: Unauthorized
  */
-router.put("/updateProfile",auth,userController.updateProfile);
+router.put("/updateProfile",
+            auth,
+            authorizeMiddleware(["employee","admin"]),
+            userController.updateProfile);
+
+/**
+ * @swagger
+ * /users/getAllUsers:
+ *   get:
+ *     summary: Retrieve all users
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/UserResponseDTO'
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/getAllUsers",
+            auth,
+            authorizeMiddleware(["admin"]),
+            userController.getAllUsers);
+
+/**
+ * @swagger
+ * /users/getUserById/{id}:
+ *   get:
+ *     summary: Get a user by its id
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/UserResponseDTO'
+ *       404:
+ *         description: User not found
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/getUserById/:id",
+            auth,
+            authorizeMiddleware(["admin"]),
+            userController.getUserById);
+
+/**
+ * @swagger
+ * /users/deleteUser/{id}:
+ *   delete:
+ *     summary: Delete a user by id
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: User ID
+ *     responses:
+ *       200:
+ *         description: User deleted
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: User not found
+ */
+router.delete("/deleteUser/:id",
+                auth,
+                authorizeMiddleware(["admin"]),
+                userController.deleteUser);
 
 export default router;

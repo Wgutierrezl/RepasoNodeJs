@@ -1,6 +1,7 @@
 import { roleController } from "../containers/role.container";
 import { Router } from "express";
 import { auth } from "../containers/user.container";
+import { authorizeMiddleware } from "../middlewares/authorize.middleware";
 
 const router=Router();
 
@@ -86,7 +87,10 @@ router.get("/getAllRoles",roleController.getAllRoles);
  *       401:
  *         description: Unauthorized
  */
-router.get("/getRoleById/:id",auth,roleController.getRoleById);
+router.get("/getRoleById/:id",
+            auth,
+            authorizeMiddleware(["admin"]),
+            roleController.getRoleById);
 
 /**
  * @swagger
@@ -147,7 +151,10 @@ router.post("/createRole",roleController.createRole);
  *       404:
  *         description: Role not found
  */
-router.put("/updateRole/:id",auth,roleController.updateRole);
+router.put("/updateRole/:id",
+            auth,
+            authorizeMiddleware(["admin"]),
+            roleController.updateRole);
 
 /**
  * @swagger
@@ -172,6 +179,9 @@ router.put("/updateRole/:id",auth,roleController.updateRole);
  *       404:
  *         description: Role not found
  */
-router.delete("/deleteRole/:id",auth,roleController.deleteRole);
+router.delete("/deleteRole/:id",
+                auth,
+                authorizeMiddleware(["admin"]),
+                roleController.deleteRole);
 
 export default router;
