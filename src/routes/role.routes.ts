@@ -114,7 +114,7 @@ router.get("/getRoleById/:id",auth,roleController.getRoleById);
  *       401:
  *         description: Unauthorized
  */
-router.post("/createRole",auth,roleController.createRole);
+router.post("/createRole",roleController.createRole);
 
 /**
  * @swagger
@@ -122,8 +122,6 @@ router.post("/createRole",auth,roleController.createRole);
  *   put:
  *     summary: Update an existing role
  *     tags: [Roles]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -146,8 +144,6 @@ router.post("/createRole",auth,roleController.createRole);
  *               $ref: '#/components/schemas/RoleResponseDTO'
  *       400:
  *         description: Invalid data
- *       401:
- *         description: Unauthorized
  *       404:
  *         description: Role not found
  */

@@ -1,5 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, ManyToOne } from "typeorm";
 import { CreateDateColumn } from "typeorm";
+import { Role } from "./role.entity";
 
 @Entity({name: "users"})
 export class User {
@@ -20,4 +21,8 @@ export class User {
 
   @CreateDateColumn()
   createdAt!: Date;
+
+  @ManyToOne(() => Role, {eager: true})
+  @JoinColumn({name: "roleId"})
+  role!: Role;
 }

@@ -17,6 +17,8 @@ const router=Router()
  *       properties:
  *         username:
  *           type: string
+ *         roleId:
+ *           type: integer
  *         email:
  *           type: string
  *           format: email
@@ -25,6 +27,7 @@ const router=Router()
  *           minLength: 6
  *       required:
  *         - username
+ *         - roleId
  *         - email
  *         - password
  *
@@ -51,6 +54,8 @@ const router=Router()
  *         email:
  *           type: string
  *           format: email
+ *         role:
+ *           $ref: '#/components/schemas/RoleResponseDTO'
  *         isActive:
  *           type: boolean
  *         createdAt:
@@ -73,6 +78,8 @@ const router=Router()
  *       properties:
  *         username:
  *           type: string
+ *         roleId:
+ *           type: integer
  *         email:
  *           type: string
  *           format: email

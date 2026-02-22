@@ -38,6 +38,7 @@ export class UserService implements IUserService{
         userCreate.username=data.username;
         userCreate.email=data.email;
         userCreate.password=this._hasherService.hashPassword(data.password);
+        userCreate.role={ id: data.roleId } as any;
 
         const user=await this._userRepository.createUser(userCreate);
 
@@ -101,6 +102,10 @@ export class UserService implements IUserService{
         if(data.password){
             user.password=this._hasherService.hashPassword(data.password);
         }
+
+        if(data.roleId){
+            user.role={ id: data.roleId } as any;
+        }
         
         const updatedUser=await this._userRepository.updateUser(id,user);
         if(!updatedUser){
@@ -115,7 +120,12 @@ export class UserService implements IUserService{
             username:data.username,
             email:data.email,
             isActive:data.isActive,
-            createdAt:data.createdAt
+            createdAt:data.createdAt,
+            role:{
+                id:data.role.id,
+                name:data.role.name,
+                description:data.role.description
+            }
         }
     }
 
@@ -123,7 +133,9 @@ export class UserService implements IUserService{
         return {
             token:token,
             userId:data.id,
-            email:data.email
+            email:data.email,
+            role:data.role.name,
+            username:data.username
         }
     }
 

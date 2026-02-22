@@ -21,7 +21,8 @@ export class TokenService implements ITokenService {
         const payload={
             id:data.id,
             email:data.email,
-            username:data.username         
+            username:data.username,
+            role:data.role.name       
         }
 
         const secrets=process.env.JWT_SECRET

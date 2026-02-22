@@ -42,7 +42,7 @@ export class RoleController{
         }
     }
 
-    createRole=async(req:AuthRequest, res:Response) : Promise<Response> => {
+    createRole=async(req:Request, res:Response) : Promise<Response> => {
         try{
             const dto:CreateRoleDTO=req.body;
             const newRole=await this._service.createRole(dto);
